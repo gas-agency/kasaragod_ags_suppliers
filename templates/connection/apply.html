@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap narrow"><div class="card"><h2>Apply for a new connection</h2>
+<p class="hint">Keep your Aadhaar card and a passport size photo ready. Files must be JPG, PNG or PDF (photo: JPG or PNG), under 5 MB each.</p>
+{% include "connection/_msgs.html" %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button class="btn">Submit application</button></form>
+</div></div></section>
+{% endblock %}

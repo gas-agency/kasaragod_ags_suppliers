@@ -1,0 +1,8 @@
+
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>My connection applications</h2>{% include "connection/_msgs.html" %}
+<p><a class="btn" href="{% url 'nc_apply' %}">New application</a></p><br>
+<div class="scroll"><table class="tbl"><tr><th>Application</th><th>Cylinder</th><th>Date</th><th>Status</th></tr>
+{% for a in apps %}<tr><td><a href="{% url 'nc_detail' a.application_no %}">{{ a.application_no }}</a></td><td>{{ a.cylinder }}</td><td>{{ a.created|date:"d M Y" }}</td><td><span class="tag">{{ a.get_status_display }}</span></td></tr>
+{% empty %}<tr><td colspan="4">No applications yet.</td></tr>{% endfor %}</table></div></div></section>
+{% endblock %}

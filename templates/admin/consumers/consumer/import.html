@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> &rsaquo; <a href="{% url 'admin:consumers_consumer_changelist' %}">Consumers</a> &rsaquo; Import from Excel</div>{% endblock %}
+{% block content %}
+<div id="content-main">
+<p>{{ total }} consumers are in the list now. Upload your consumer list (.xlsx or .csv, under 5 MB, headings in the first row of the first sheet).
+Existing consumers are updated by consumer number, and empty cells never erase saved data. Aadhaar columns are ignored and never stored.</p>
+<p>Include a <b>Mobile</b> column. It is used to confirm 14.2 kg cylinder bookings.</p>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Import" class="default">
+</form>
+<p style="margin-top:16px"><a href="{% url 'consumer_template' %}">Download the sample Excel file</a> &middot; <a href="{% url 'admin:consumers_consumer_changelist' %}">Back to consumers</a></p>
+{% if result %}
+<h2>{% if result.dry %}Preview{% else %}Result{% endif %}</h2>
+<p><b>{{ result.created }}</b> {% if result.dry %}would be added{% else %}added{% endif %}, <b>{{ result.updated }}</b> {% if result.dry %}would be updated{% else %}updated{% endif %}, <b>{{ result.skipped }}</b> skipped.</p>
+{% if result.errors %}<p>Skipped rows:</p><ul>{% for e in result.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+<p><b>Columns used:</b> {{ result.mapped|join:"; " }}</p>
+{% if result.unknown %}<p><b>Columns not used:</b> {{ result.unknown|join:", " }}. To import one of these, rename its heading in Excel to a name from the sample file and upload again.</p>{% endif %}
+{% if result.dry %}<p>Nothing was saved. Untick "Preview only" and import again to save.</p>{% endif %}
+{% endif %}
+</div>
+{% endblock %}

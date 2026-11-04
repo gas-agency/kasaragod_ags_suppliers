@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>Order {{ o.order_no }}</h2>
+<p class="sub">Placed {{ o.created|date:"d M Y, h:i A" }}. Payment: {{ o.get_payment_method_display }} ({{ o.get_payment_status_display }}).</p>
+{% include "shop/_msgs.html" %}
+{% if o.status == "cancelled" %}<p><span class="tag">Cancelled</span></p>
+{% elif o.status == "awaiting" %}<p><span class="tag">Awaiting payment</span></p>
+{% if o.payment_method == "online" %}<form method="post" action="{% url 'order_pay' o.order_no %}">{% csrf_token %}<button class="btn">Pay now</button></form>{% endif %}
+{% else %}<div class="prog">{% for label,done in steps %}<span class="{% if done %}done{% endif %}">{{ label }}</span>{% endfor %}</div>{% endif %}
+<br><div class="two"><div><h3>Items</h3><div class="scroll"><table class="tbl"><tr><th>Item</th><th>Qty</th><th>Subtotal</th></tr>
+{% for i in o.items.all %}<tr><td>{{ i.name }}</td><td>{{ i.qty }}</td><td>&#8377;{{ i.subtotal|floatformat:2 }}</td></tr>{% endfor %}</table></div>
+<p class="tot">Total: &#8377;{{ o.total|floatformat:2 }}</p><p>Deliver to: {{ o.name }}, {{ o.phone }}<br>{{ o.address }}</p></div>
+<div><h3>Tracking</h3><ul class="tl">{% for e in o.events.all %}<li><b>{{ e.get_status_display }}</b>{% if e.note %}: {{ e.note }}{% endif %}<br><small>{{ e.created|date:"d M Y, h:i A" }}</small></li>
+{% empty %}<li>Tracking starts after the order is confirmed.</li>{% endfor %}</ul></div></div></div></section>
+{% endblock %}

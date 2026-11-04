@@ -1,0 +1,46 @@
+{% load static %}<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ agency.name }} | LPG Gas Cylinder Booking &amp; Home Delivery</title>
+<meta name="description" content="Book LPG cylinders online with {{ agency.name }}, authorised gas agency. Dealer code {{ agency.dealer_code }}.">
+<link rel="icon" href="{% static 'img/logo.svg' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/notices.css' %}">
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head><body{% if user.is_authenticated %} data-auth="1"{% endif %}>
+<header><div class="wrap"><a class="brand" href="/"><img src="{% static 'img/logo.svg' %}" alt="">{{ agency.name }}</a>
+<button class="menu" aria-expanded="false" aria-label="Menu">Menu</button>
+<nav class="nav">
+<a href="/#cylinders">Cylinders</a>
+<a href="{% url 'shop_home' %}">Accessories</a>
+<a href="{% url 'nc_apply' %}">New connection</a>
+<a href="{% url 'offers' %}">Offers</a>
+<a href="/#contact">Contact</a>
+<a href="{% url 'cart_detail' %}">Cart{% if cart_count %}<span class="cartn">{{ cart_count }}</span>{% endif %}</a>
+{% if user.is_authenticated %}
+<details class="acct"><summary><span class="av">{{ user.first_name|default:user.username|slice:":1"|upper }}</span>{{ user.first_name|default:user.username }}{% if unread_count %}<i class="dot">{{ unread_count }}</i>{% endif %}</summary>
+<div class="pop">
+{% if role == "manager" %}<a href="{% url 'admin_dashboard' %}">Dashboard</a>{% else %}<a href="{% url 'dashboard' %}">My account</a>{% endif %}
+<a href="{% url 'notifications' %}">Notifications{% if unread_count %} ({{ unread_count }}){% endif %}</a>
+{% if role == "customer" %}<a href="{% url 'customer_home' %}">My bookings</a><a href="{% url 'orders' %}">My orders</a><a href="{% url 'nc_list' %}">My applications</a>{% endif %}
+{% if role == "staff" or role == "manager" %}<a href="{% url 'staff_home' %}">Gas bookings</a><a href="{% url 'manage_orders' %}">Accessory orders</a><a href="{% url 'nc_manage' %}">Connection requests</a>{% endif %}
+<form class="lo" method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Log out</button></form>
+</div></details>
+{% else %}<a href="{% url 'login' %}">Log in</a>{% endif %}
+<a class="btn" href="/#book">Book now</a>
+</nav></div></header>
+{% block content %}{% endblock %}
+<a class="wa" href="https://wa.me/{{ agency.whatsapp }}?text=Hello%20{{ agency.name|urlencode }}%2C%20I%20want%20to%20book%20a%20cylinder">WhatsApp us</a>
+<footer><div class="wrap">&copy; {% now "Y" %} {{ agency.name }} &middot; Dealer code {{ agency.dealer_code }} &middot; {{ agency.address }}</div></footer>
+{% if user.is_authenticated %}
+<div id="idle" class="idle" role="alertdialog" aria-modal="true" aria-labelledby="idle-t" hidden><div class="idle-box">
+<h3 id="idle-t">Are you still there?</h3>
+<p>For your security you will be logged out in <b id="idle-sec">30</b> seconds.</p>
+<button id="idle-stay" class="btn" type="button">Stay logged in</button> <button id="idle-out" class="btn out" type="button">Log out now</button>
+</div></div>
+{% endif %}
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/idle.js' %}"></script>
+<script>document.addEventListener('click',function(e){var d=document.querySelector('.acct');if(d&&!d.contains(e.target))d.removeAttribute('open');});</script>
+</body></html>

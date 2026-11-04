@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap narrow"><div class="card"><h2>Pay &#8377;{{ order.total|floatformat:2 }}</h2>
+<p>Order {{ order.order_no }}. You will pay securely through Razorpay with UPI, card or net banking.</p>
+<button id="paybtn" class="btn">Pay now</button>
+<form id="verify" method="post" action="{% url 'payment_verify' %}">{% csrf_token %}
+<input type="hidden" name="razorpay_payment_id" id="rp_id"><input type="hidden" name="razorpay_order_id" id="rp_order"><input type="hidden" name="razorpay_signature" id="rp_sig"></form>
+</div></div></section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var opts = {
+  key: "{{ key|escapejs }}", amount: "{{ amount }}", currency: "INR",
+  name: "{{ agency.name|escapejs }}", description: "Order {{ order.order_no|escapejs }}",
+  order_id: "{{ order.gateway_order_id|escapejs }}",
+  prefill: {name: "{{ order.name|escapejs }}", contact: "{{ order.phone|escapejs }}"},
+  theme: {color: "#FF6A13"},
+  handler: function (r) {
+    document.getElementById("rp_id").value = r.razorpay_payment_id;
+    document.getElementById("rp_order").value = r.razorpay_order_id;
+    document.getElementById("rp_sig").value = r.razorpay_signature;
+    document.getElementById("verify").submit();
+  }
+};
+document.getElementById("paybtn").onclick = function (e) { new Razorpay(opts).open(); e.preventDefault(); };
+</script>
+{% endblock %}

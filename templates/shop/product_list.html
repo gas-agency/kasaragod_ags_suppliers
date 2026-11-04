@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% block content %}
+<style>
+.pg{display:grid;gap:22px;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch}
+.pc{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid #DCE7F5;border-radius:20px;padding:18px;box-shadow:0 8px 22px rgba(10,59,140,.08);transition:transform .2s,box-shadow .2s}
+.pc:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(10,59,140,.16)}
+.pc-img{aspect-ratio:1/1;width:100%;display:grid;place-items:center;background:#fff;border:1px solid #E3EDF9;border-radius:14px;overflow:hidden;margin-bottom:14px;font:700 2.4rem sans-serif;color:#9DB1CC}
+.pc-img img{display:block;width:100%;height:100%;object-fit:contain;padding:10px}
+.pc-tag{align-self:flex-start;background:#E3EEFC;color:#0A3B8C;border-radius:999px;padding:3px 14px;font-weight:700;font-size:.88rem;margin-bottom:10px}
+.pc h3{font-size:1.15rem;line-height:1.25;min-height:2.5em;margin:0 0 6px;color:#0A3B8C}
+.pc-price{font:700 1.8rem/1.1 "Bricolage Grotesque","Segoe UI",sans-serif;color:#10223D;margin:2px 0 8px}
+.pc-desc{color:#5B6F8C;margin:0 0 14px;flex-grow:1;line-height:1.5}
+.pc-buy{display:flex;gap:10px;align-items:center;margin-top:auto}
+.pc-buy input{width:72px;flex:none;padding:10px;border:1px solid #DCE7F5;border-radius:12px;text-align:center;font:inherit}
+.pc-buy .btn{flex:1;text-align:center;padding:12px 14px;white-space:nowrap}
+.pc-out{margin-top:auto;padding:12px;border-radius:12px;background:#F1F6FC;color:#5B6F8C;text-align:center;font-weight:700}
+.sbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.sbar input{max-width:340px;width:100%}
+@media(max-width:1100px){.pg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){.pg{grid-template-columns:repeat(2,minmax(0,1fr))}.pc{padding:14px}}
+@media(max-width:480px){.pg{grid-template-columns:1fr}.pc h3{min-height:0}}
+@media(prefers-reduced-motion:reduce){.pc{transition:none}.pc:hover{transform:none}}
+</style>
+
+<section><div class="wrap"><h2>Gas accessories</h2><p class="sub">Regulators, hoses, stoves and safety items from {{ agency.name }}.</p>
+{% include "shop/_msgs.html" %}
+<form method="get" class="sbar"><input name="q" value="{{ q }}" placeholder="Search accessories"><button class="btn">Search</button></form>
+<div class="filters"><a href="{% url 'shop_home' %}" class="{% if not cat %}on{% endif %}">All</a>{% for c in cats %}<a href="?cat={{ c|urlencode }}" class="{% if c == cat %}on{% endif %}">{{ c }}</a>{% endfor %}</div>
+<div class="pg">{% for p in products %}
+<div class="pc">
+<div class="pc-img">{% if p.image %}<img src="{{ p.image.url }}" alt="{{ p.name }}">{% else %}{{ p.name|slice:":1" }}{% endif %}</div>
+<span class="pc-tag">{{ p.category }}</span>
+<h3>{{ p.name }}</h3>
+<div class="pc-price">&#8377;{{ p.price|floatformat:0 }}</div>
+<p class="pc-desc">{{ p.description }}</p>
+{% if p.stock > 0 %}<form method="post" action="{% url 'cart_add' %}" class="pc-buy">{% csrf_token %}<input type="hidden" name="product" value="{{ p.pk }}"><input type="number" name="qty" value="1" min="1" max="{{ p.stock }}" aria-label="Quantity"><button class="btn">Add to cart</button></form>
+{% else %}<div class="pc-out">Out of stock</div>{% endif %}
+</div>
+{% empty %}<p>No accessories found.</p>{% endfor %}</div></div></section>
+{% endblock %}

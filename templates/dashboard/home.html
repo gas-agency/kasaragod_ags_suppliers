@@ -1,0 +1,61 @@
+{% extends "base.html" %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<section class="dash"><div class="wrap">
+
+<div class="dhero"><div><h2>Welcome, {{ user.first_name|default:user.username }}</h2>
+<p>{{ today|date:"l, d F Y" }} &middot; {{ agency.name }} &middot; Dealer code {{ agency.dealer_code }}</p></div>
+<div class="qa"><a class="btn" href="/">View website</a>{% if user.is_superuser %}<a class="btn ghost" href="/admin/">Admin panel</a>{% endif %}</div></div>
+
+<div class="stats">{% for c in cards %}
+<a class="stat c-{{ c.color }}" href="{{ c.url|default:'#' }}"><span>{{ c.label }}</span><b>{{ c.value }}</b><small>{{ c.note }}</small></a>{% endfor %}</div>
+
+<div class="panel"><h3>Reports and Excel downloads</h3>
+<p class="hint">Open a report to see every record with search and date filters, then download the same view as Excel.</p>
+<div class="scroll"><table class="tbl"><tr><th>Report</th><th>Records</th><th>What it shows</th><th></th></tr>
+{% for h in hub %}<tr><td><b>{{ h.title }}</b></td><td>{{ h.count }}</td><td>{{ h.note }}</td>
+<td><div class="inl"><a class="btn" href="{% url 'report' h.kind %}">View</a><a class="btn alt" href="{% url 'export' h.kind %}">Excel</a></div></td></tr>{% endfor %}</table></div>
+<p style="margin-top:16px"><a class="btn" href="{% url 'export_all' %}">Download every report in one Excel file</a></p></div>
+
+<div class="two dgrid">
+<div class="panel"><h3>Bookings, last 7 days</h3>
+<div class="bars">{% for d in bars %}<div class="bar"><span>{{ d.n }}</span><div class="col"><i style="height:{{ d.pct }}%"></i></div><small>{{ d.label }}</small></div>{% endfor %}</div></div>
+<div class="panel"><h3>Booking status</h3>
+{% for label,n,pct in status_rows %}<div class="hb"><div><span>{{ label }}</span><b>{{ n }}</b></div><div class="track2"><i style="width:{{ pct }}%"></i></div></div>{% endfor %}</div>
+</div>
+
+<div class="panel"><h3>Manage everything</h3><div class="tiles">
+<a href="{% url 'staff_home' %}">Update gas bookings</a>
+<a href="{% url 'manage_orders' %}">Update accessory orders</a>
+<a href="{% url 'nc_manage' %}">Verify new connections</a>
+<a href="{% url 'manager_home' %}">Staff accounts</a>
+<a href="{% url 'staff_new' %}">Add staff</a>
+<a href="{% url 'shop_home' %}">Accessories shop</a>
+{% if user.is_superuser %}
+<a href="/admin/gas/cylinder/">Cylinders and prices</a>
+<a href="/admin/shop/product/">Products and stock</a>
+<a href="/admin/carousel/carousel/">Carousel slides</a>
+<a href="/admin/gas/enquiry/">Enquiries</a>
+<a href="/admin/auth/user/">All users</a>
+<a href="/admin/accounts/profile/">User roles</a>
+{% endif %}</div></div>
+
+<div class="two dgrid">
+<div class="panel"><h3>Latest bookings</h3><div class="scroll"><table class="tbl"><tr><th>No.</th><th>Name</th><th>Cylinder</th><th>Status</th></tr>
+{% for b in recent_bookings %}<tr><td>#{{ b.pk }}</td><td>{{ b.name }}<br><small>{{ b.phone }}</small></td><td>{{ b.cylinder }} x {{ b.quantity }}</td><td><span class="tag">{{ b.get_status_display }}</span></td></tr>
+{% empty %}<tr><td colspan="4">No bookings yet.</td></tr>{% endfor %}</table></div>
+<p style="margin-top:12px"><a href="{% url 'report' 'bookings' %}">See all bookings</a></p></div>
+<div class="panel"><h3>Latest accessory orders</h3><div class="scroll"><table class="tbl"><tr><th>Order</th><th>Name</th><th>Total</th><th>Status</th></tr>
+{% for o in recent_orders %}<tr><td><a href="{% url 'order_detail' o.order_no %}">{{ o.order_no }}</a></td><td>{{ o.name }}</td><td>&#8377;{{ o.total|floatformat:0 }}</td><td><span class="tag">{{ o.get_status_display }}</span></td></tr>
+{% empty %}<tr><td colspan="4">No orders yet.</td></tr>{% endfor %}</table></div>
+<p style="margin-top:12px"><a href="{% url 'report' 'orders' %}">See all orders</a></p></div>
+</div>
+
+<div class="panel"><h3>Latest new connection requests</h3><div class="scroll"><table class="tbl"><tr><th>Application</th><th>Name</th><th>Phone</th><th>Cylinder</th><th>Status</th></tr>
+{% for a in recent_connections %}<tr><td><a href="{% url 'nc_detail' a.application_no %}">{{ a.application_no }}</a></td><td>{{ a.name }}</td><td>{{ a.phone }}</td><td>{{ a.cylinder }}</td><td><span class="tag">{{ a.get_status_display }}</span></td></tr>
+{% empty %}<tr><td colspan="5">No applications yet.</td></tr>{% endfor %}</table></div>
+<p style="margin-top:12px"><a href="{% url 'report' 'connections' %}">See all connection requests</a></p></div>
+
+{% if low %}<div class="panel warn"><h3>Low stock</h3><p>{% for p in low %}<span class="tag">{{ p.name }}: {{ p.stock }} left</span> {% endfor %}</p></div>{% endif %}
+
+</div></section>
+{% endblock %}

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Kasargod Gas Suppliers</title>
+  <desc id="desc">Red and blue LPG flame and cylinder emblem with Kasargod Gas Suppliers lettering.</desc>
+  <defs>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0877d8"/><stop offset="1" stop-color="#062e91"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff202b"/><stop offset="1" stop-color="#d90016"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="#fff"/>
+  <!-- Circular arc -->
+  <path d="M185 475 A415 415 0 0 1 1010 410" fill="none" stroke="#0754b7" stroke-width="10" stroke-linecap="round"/>
+  <!-- Flame -->
+  <path d="M405 655 C315 580 260 515 292 420 C316 350 385 315 426 220 C439 287 490 324 481 389 C476 430 454 456 468 490 C492 451 511 423 506 385 C574 469 565 553 489 634 C465 659 436 672 405 655Z" fill="url(#blue)"/>
+  <path d="M408 635 C354 578 329 527 352 465 C368 424 402 397 420 363 C431 415 405 451 418 488 C431 526 452 546 441 584 C434 606 421 622 408 635Z" fill="#fff"/>
+  <path d="M413 628 C396 585 411 554 431 525 C449 565 462 597 436 626 C429 634 420 635 413 628Z" fill="#087bd5"/>
+  <!-- Cylinder -->
+  <g>
+    <path d="M585 300 Q585 281 607 281 H732 Q754 281 754 300 V348 Q799 371 799 418 V580 Q799 610 769 622 H570 Q540 610 540 580 V418 Q540 371 585 348Z" fill="url(#red)"/>
+    <path d="M587 298 H752 M602 301 V347 M738 301 V347" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="670" cy="282" rx="83" ry="16" fill="#e60018"/>
+    <ellipse cx="670" cy="282" rx="64" ry="7" fill="#fff"/>
+    <rect x="654" y="291" width="32" height="28" rx="5" fill="#e90018"/>
+    <rect x="643" y="315" width="54" height="16" rx="4" fill="#e90018"/>
+    <circle cx="670" cy="470" r="78" fill="#fff"/>
+    <text x="670" y="463" font-family="Arial, Helvetica, sans-serif" font-size="49" font-weight="900" text-anchor="middle" fill="#ed1522">HP</text>
+    <path d="M610 484 Q637 490 670 526 Q703 490 730 484 Q713 526 670 540 Q627 526 610 484Z" fill="#073f9b"/>
+    <path d="M621 501 Q645 510 670 538 Q695 510 719 501" fill="none" stroke="#fff" stroke-width="5"/>
+  </g>
+  <!-- HP Gas label -->
+  <text x="830" y="422" font-family="Arial, Helvetica, sans-serif" font-size="53" font-weight="900" fill="#073d96">HP GAS</text>
+  <text x="850" y="466" font-family="Arial, Helvetica, sans-serif" font-size="29" font-style="italic" fill="#073d96">Live Safe</text>
+  <text x="850" y="504" font-family="Arial, Helvetica, sans-serif" font-size="29" font-style="italic" fill="#073d96">Live Better</text>
+  <!-- Swoosh -->
+  <path d="M286 650 Q492 742 698 652 Q828 598 929 637 Q800 619 689 690 Q467 784 286 650Z" fill="url(#red)"/>
+  <path d="M474 733 Q726 682 934 660 Q820 681 697 718 Q568 756 474 733Z" fill="#073d96"/>
+  <!-- Wordmark -->
+  <text x="600" y="866" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="126" font-weight="900" letter-spacing="1" fill="#073d96">KASARGOD</text>
+  <text x="600" y="957" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="67" font-weight="900" letter-spacing="1" fill="#ed1824">GAS SUPPLIERS</text>
+  <path d="M96 930 H177 M1023 930 H1104" stroke="#073d96" stroke-width="5"/>
+  <!-- Agency badge -->
+  <rect x="245" y="987" width="710" height="78" rx="39" fill="#073d96"/>
+  <text x="600" y="1038" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="39" font-weight="800" letter-spacing="3" fill="#fff">HP GAS AGENCY</text>
+</svg>

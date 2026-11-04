@@ -1,0 +1,68 @@
+{% extends "base.html" %}{% block content %}
+{% load notice_tags %}{% show_banner %}
+<div class="hero"><div class="wrap"><div>
+<h1>Cooking gas at your door, on time.</h1>
+<p>{{ agency.name }} delivers domestic and commercial LPG cylinders across Kasaragod. Book in two minutes, we confirm by phone.</p>
+<div class="acts"><a class="btn" href="#book">Book a cylinder</a><a class="btn ghost" href="tel:{{ agency.phone }}">Call {{ agency.phone }}</a></div>
+<div class="code">Authorised dealer code <b>{{ agency.dealer_code }}</b></div></div>
+<svg class="cyl" viewBox="0 0 200 300" role="img" aria-label="Gas cylinder with flame"><g class="flame"><path d="M100 4c20 24 32 38 32 56a32 32 0 0 1-64 0c0-14 8-22 16-30 0 12 4 16 8 16 4-12 4-24 8-42z" fill="#FF6A13"/><path d="M100 36c8 12 12 16 12 24a12 12 0 0 1-24 0c0-8 8-12 12-24z" fill="#2BA3FF"/></g>
+    
+<rect x="76" y="88" width="48" height="34" rx="8" fill="#9db3c6"/><rect x="30" y="112" width="140" height="180" rx="50" fill="#fff"/><rect x="30" y="170" width="140" height="26" fill="#FF6A13"/><text x="100" y="188" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="sans-serif">LPG</text><rect x="46" y="284" width="108" height="10" rx="4" fill="#9db3c6"/></svg></div></div>
+<div class="strip"><div class="wrap"><span>Same-day booking confirmation</span><span>Genuine sealed cylinders</span><span>Domestic &amp; commercial supply</span><span>{{ agency.hours }}</span></div></div>
+
+
+
+<section id="cylinders">
+<style>
+.cg{display:grid;gap:22px;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch}
+.cc{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid #DCE7F5;border-radius:20px;padding:18px;box-shadow:0 8px 22px rgba(10,59,140,.08);transition:transform .2s,box-shadow .2s}
+.cc:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(10,59,140,.16)}
+.cc-img{aspect-ratio:1/1;width:100%;display:grid;place-items:center;background:#F6F9FE;border:1px solid #E3EDF9;border-radius:14px;overflow:hidden;margin-bottom:14px;font:700 1.4rem sans-serif;color:#5B6F8C}
+.cc-img img{display:block;width:100%;height:100%;object-fit:contain;padding:8px}
+.cc-tag{align-self:flex-start;background:#E3EEFC;color:#0A3B8C;border-radius:999px;padding:3px 14px;font-weight:700;font-size:.9rem;margin-bottom:10px}
+.cc h3{font-size:1.2rem;line-height:1.25;min-height:2.5em;margin:0 0 6px;color:#0A3B8C}
+.cc-price{font:700 1.9rem/1.1 "Bricolage Grotesque","Segoe UI",sans-serif;color:#10223D;margin:4px 0 8px}
+.cc-price small{font:400 .85rem "Source Sans 3",sans-serif;color:#5B6F8C}
+.cc-use{color:#5B6F8C;margin:0 0 16px;flex-grow:1}
+.cc .btn{margin-top:auto;align-self:stretch;text-align:center;padding:12px 20px}
+@media(max-width:1100px){.cg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.cg{grid-template-columns:1fr}.cc h3{min-height:0}}
+@media(prefers-reduced-motion:reduce){.cc{transition:none}.cc:hover{transform:none}}
+</style>
+<div class="wrap"><h2>Our cylinders</h2><p class="sub">Pick the size that suits your kitchen. Prices are indicative; the final amount is confirmed when we call.</p>
+<div class="cg">{% for c in cylinders %}
+<div class="cc">
+<div class="cc-img">{% if c.image %}<img src="{{ c.image.url }}" alt="{{ c.name }} {{ c.weight }} cylinder">{% else %}{{ c.weight }}{% endif %}</div>
+<span class="cc-tag">{{ c.weight }}</span>
+<h3>{{ c.name }}</h3>
+<div class="cc-price">&#8377;{{ c.price|floatformat:0 }} <small>per cylinder</small></div>
+<p class="cc-use">{{ c.use }}</p>
+<a class="btn" href="#book" data-pick="{{ c.pk }}">Book this</a>
+</div>
+{% empty %}<p>Cylinders will be listed here soon.</p>{% endfor %}</div></div></section>
+
+<section id="services" class="dark"><div class="wrap"><h2>Services</h2><p class="sub">Everything you need from your gas agency.</p>
+<div class="grid"><div class="card svc"><h3>Home delivery</h3><p>Cylinders delivered to your kitchen by trained staff.</p></div>
+<div class="card svc"><h3>New connection</h3><p>Apply for a new domestic connection with ID and address proof.</p></div>
+<div class="card svc"><h3>Commercial supply</h3><p>Regular bulk supply for hotels, bakeries and canteens.</p></div>
+<div class="card svc"><h3>Regulator &amp; hose</h3><p>ISI-marked regulators and safety hoses available at the office.</p></div></div></div></section>
+
+<section><div class="wrap"><h2>How booking works</h2><p class="sub">Three steps, no queue.</p>
+<div class="grid steps"><div class="card"><h3>Fill the form</h3><p>Enter your name, mobile and delivery address.</p></div><div class="card"><h3>We call you</h3><p>Our team confirms the date and amount.</p></div><div class="card"><h3>Pay on delivery</h3><p>Receive the cylinder and check the seal before paying.</p></div></div></div></section>
+
+<section id="book" class="dark"><div class="wrap two"><div><h2>Book a cylinder</h2><p class="sub">Dealer code {{ agency.dealer_code }}. Keep your consumer number ready if you are an existing customer.</p></div>
+<div class="card">
+    {% for m in messages %}{% if m.level_tag != "error" and "contact" not in m.tags %}<div class="msg" role="status">{{ m }}</div>{% endif %}{% endfor %}
+<form method="post" action="/book/">
+    
+    {% csrf_token %}{{ booking_form.as_p }}<button class="btn">Confirm booking</button></form></div></div></section>
+
+<section id="safety"><div class="wrap two"><div><h2>Gas safety</h2><ul class="safety"><li>Keep the cylinder upright and away from heat.</li><li>Switch the regulator off at night and when away.</li><li>Check hose and regulator for cracks every few months.</li><li>Never use a leaking cylinder; open windows and avoid switches.</li></ul></div>
+<div class="emerg"><h3>Smell gas?</h3><p>Do not light a flame or switch on lights. Open doors and windows, turn off the regulator, move outside and call us or the LPG emergency line 1906.</p></div></div></section>
+
+<section id="contact" class="dark"><div class="wrap two"><div>
+    <h2>Contact us</h2>
+{% for m in messages %}{% if m.level_tag == "error" or "contact" in m.tags %}<div class="msg{% if m.level_tag == 'error' %} err{% endif %}" role="alert">{{ m }}</div>{% endif %}{% endfor %}
+    <p class="sub">{{ agency.name }}<br>{{ agency.address }}<br>Phone: <a href="tel:{{ agency.phone }}">{{ agency.phone }}</a><br>Email: {{ agency.email }}<br>{{ agency.hours }}</p></div>
+<div class="card"><form method="post" action="/enquiry/">{% csrf_token %}{{ enquiry_form.as_p }}<button class="btn">Send message</button></form></div></div></section>
+{% endblock %}

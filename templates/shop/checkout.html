@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block content %}
+<style>
+.payopts{display:grid;gap:10px;margin:6px 0 18px}
+.payopt{display:flex;align-items:center;gap:12px;margin:0;padding:14px 16px;border:2px solid #DCE7F5;border-radius:14px;cursor:pointer;background:#fff;font-weight:600}
+.payopt:hover{border-color:#1E88E5}
+.payopt input{width:auto;flex:none;margin:0;accent-color:#0A3B8C;transform:scale(1.2)}
+.payopt:has(input:checked){border-color:#0A3B8C;background:#F1F6FC}
+.payopt small{display:block;font-weight:400;color:#5B6F8C}
+.paynote{margin:0 0 16px;padding:12px 14px;border-radius:12px;background:#FFF8EB;border:1px solid #F5C77A;color:#6B4A00;font-size:.95rem}
+.fieldwrap p{margin-bottom:14px}
+</style>
+<section><div class="wrap two"><div><h2>Checkout</h2><p class="sub">Check your items and enter the delivery details.</p>
+<div class="scroll"><table class="tbl"><tr><th>Item</th><th>Qty</th><th>Subtotal</th></tr>
+{% for l in lines %}<tr><td>{{ l.product.name }}</td><td>{{ l.qty }}</td><td>&#8377;{{ l.subtotal|floatformat:2 }}</td></tr>{% endfor %}</table></div>
+<p class="tot">Total: &#8377;{{ total|floatformat:2 }}</p></div>
+<div class="card"><form method="post">{% csrf_token %}
+<div class="fieldwrap">{% for f in form %}{% if f.name != "payment_method" %}<p>{{ f.errors }}{{ f.label_tag }} {{ f }}</p>{% endif %}{% endfor %}</div>
+<label style="font-weight:600">Payment method</label>
+{{ form.payment_method.errors }}
+<div class="payopts">{% for radio in form.payment_method %}
+<label class="payopt">{{ radio.tag }}<span>{{ radio.choice_label }}{% if radio.data.value == "online" %}<small>Secure payment through Razorpay</small>{% else %}<small>Pay in cash when the order arrives</small>{% endif %}</span></label>
+{% endfor %}</div>
+{% if form.payment_method.field.choices|length < 2 %}<div class="paynote">Online payment is not available right now. Please choose cash on delivery.{% if role == "manager" %}<br><b>Manager:</b> add your Razorpay keys in <code>config/settings.py</code> to turn on online payment.{% endif %}</div>{% endif %}
+<button class="btn">Place order</button></form></div></div></section>
+{% endblock %}

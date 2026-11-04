@@ -1,0 +1,6 @@
+[
+ {"model":"gas.cylinder","pk":1,"fields":{"name":"Domestic LPG","weight":"14.2 kg","price":"900.00","use":"Home kitchens","available":true}},
+ {"model":"gas.cylinder","pk":2,"fields":{"name":"Domestic LPG Compact","weight":"5 kg","price":"400.00","use":"Students, small families","available":true}},
+ {"model":"gas.cylinder","pk":3,"fields":{"name":"Commercial LPG","weight":"19 kg","price":"1800.00","use":"Hotels, canteens, bakeries","available":true}},
+ {"model":"gas.cylinder","pk":4,"fields":{"name":"Commercial LPG Large","weight":"47.5 kg","price":"4400.00","use":"Large kitchens, industry","available":true}}
+]

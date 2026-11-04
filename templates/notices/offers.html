@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>Offers and announcements</h2><p class="sub">Latest news from {{ agency.name }}.</p>
+<div class="ogrid">{% for b in banners %}<div class="ocard">
+{% if b.link %}<a href="{{ b.link }}">{% endif %}<img src="{{ b.image.url }}" alt="{{ b.title }}">{% if b.link %}</a>{% endif %}
+<div class="otext"><h3>{{ b.title }}</h3>{% if b.text %}<p>{{ b.text }}</p>{% endif %}</div></div>
+{% empty %}<p>No offers right now. Please check again soon.</p>{% endfor %}</div></div></section>
+{% endblock %}

@@ -1,0 +1,8 @@
+[
+ {"model":"shop.product","pk":1,"fields":{"name":"ISI Gas Regulator","category":"Regulators","description":"ISI-marked LPG regulator for domestic cylinders.","price":"250.00","stock":25,"active":true}},
+ {"model":"shop.product","pk":2,"fields":{"name":"Suraksha Rubber Hose 1.5 m","category":"Hoses","description":"Reinforced LPG hose pipe with clips.","price":"180.00","stock":40,"active":true}},
+ {"model":"shop.product","pk":3,"fields":{"name":"2 Burner Glass Top Stove","category":"Stoves","description":"Toughened glass top, brass burners.","price":"2200.00","stock":8,"active":true}},
+ {"model":"shop.product","pk":4,"fields":{"name":"3 Burner Gas Stove","category":"Stoves","description":"Stainless steel body with auto ignition.","price":"3400.00","stock":5,"active":true}},
+ {"model":"shop.product","pk":5,"fields":{"name":"Gas Lighter","category":"Safety","description":"Long-neck gas lighter.","price":"120.00","stock":60,"active":true}},
+ {"model":"shop.product","pk":6,"fields":{"name":"Gas Leak Detector","category":"Safety","description":"Plug-in LPG leak alarm.","price":"1200.00","stock":10,"active":true}}
+]

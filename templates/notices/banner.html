@@ -1,0 +1,72 @@
+{% if banners %}
+<style>
+.hbn{padding:28px 0 8px}
+.hbn-view{position:relative;overflow:hidden;border-radius:24px;background:#0A3B8C;box-shadow:0 16px 38px rgba(10,59,140,.25)}
+.hbn-track{display:flex;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.hbn-slide{position:relative;flex:0 0 100%;min-width:100%;aspect-ratio:16/6;overflow:hidden;background:#0A3B8C}
+.hbn-slide:before{content:"";position:absolute;inset:-24px;background:var(--bg) center/cover no-repeat;filter:blur(22px) brightness(.9)}
+.hbn-slide a{position:absolute;inset:0;z-index:1;display:block}
+.hbn-slide img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;display:block;margin:0;border-radius:0;box-shadow:none;background:none;aspect-ratio:auto;min-height:0}
+.hbn-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:46px 26px 18px;background:linear-gradient(transparent,rgba(7,31,74,.88));color:#fff;font:700 1.15rem/1.3 "Bricolage Grotesque","Segoe UI",sans-serif;pointer-events:none}
+.hbn-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.95);color:#0A3B8C;font:700 1.7rem/1 sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.28);transition:background .2s,color .2s}
+.hbn-btn:hover{background:#E4262C;color:#fff}
+.hbn-prev{left:16px}.hbn-next{right:16px}
+.hbn-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}
+.hbn-dots{display:flex;gap:8px}
+.hbn-dots button{width:10px;height:10px;padding:0;border:0;border-radius:10px;background:#B9CBE4;cursor:pointer;transition:width .25s,background .25s}
+.hbn-dots button[aria-selected="true"]{width:30px;background:#E4262C}
+.hbn-more{font-weight:700;color:#0A3B8C;text-decoration:none}
+.hbn-more:hover{color:#E4262C}
+@media(max-width:700px){
+  .hbn-slide{aspect-ratio:16/9}
+  .hbn-view{border-radius:16px}
+  .hbn-btn{width:36px;height:36px;font-size:1.3rem}
+  .hbn-prev{left:8px}.hbn-next{right:8px}
+  .hbn-cap{font-size:.95rem;padding:34px 16px 12px}
+}
+@media(prefers-reduced-motion:reduce){.hbn-track{transition:none}}
+</style>
+
+<section class="hbn"><div class="wrap">
+<div class="hbn-view" aria-roledescription="carousel" aria-label="Offers">
+<div class="hbn-track">
+{% for b in banners %}
+<div class="hbn-slide" role="group" aria-roledescription="slide" aria-label="{{ forloop.counter }} of {{ banners|length }}" style="--bg:url('{{ b.image.url }}')">
+{% if b.link %}<a href="{{ b.link }}" aria-label="{{ b.title }}"></a>{% endif %}
+<img src="{{ b.image.url }}" alt="{{ b.title }}"{% if not forloop.first %} loading="lazy"{% endif %}>
+{% if b.text %}<div class="hbn-cap">{{ b.text }}</div>{% endif %}
+</div>
+{% endfor %}
+</div>
+{% if banners|length > 1 %}
+<button class="hbn-btn hbn-prev" type="button" aria-label="Previous offer">&#8249;</button>
+<button class="hbn-btn hbn-next" type="button" aria-label="Next offer">&#8250;</button>
+{% endif %}
+</div>
+<div class="hbn-foot"><div class="hbn-dots" role="tablist" aria-label="Choose offer"></div><a class="hbn-more" href="{% url 'offers' %}">See all offers &rarr;</a></div>
+</div></section>
+
+<script>
+(function(){
+  var root=document.querySelector('.hbn-view'); if(!root||root.dataset.ready) return; root.dataset.ready=1;
+  var track=root.querySelector('.hbn-track'), slides=[].slice.call(root.querySelectorAll('.hbn-slide')),
+      dots=document.querySelector('.hbn-dots');
+  if(slides.length<2){dots.style.display='none';return;}
+  var i=0,timer=null,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  slides.forEach(function(_,n){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-label','Offer '+(n+1));b.onclick=function(){go(n);play();};dots.appendChild(b);});
+  function go(n){i=(n+slides.length)%slides.length;track.style.transform='translateX(-'+(i*100)+'%)';
+    slides.forEach(function(s,k){s.setAttribute('aria-hidden',k!==i);});
+    [].slice.call(dots.children).forEach(function(d,k){d.setAttribute('aria-selected',k===i);});}
+  function stop(){clearInterval(timer);}
+  function play(){stop();if(!reduce)timer=setInterval(function(){go(i+1);},5000);}
+  root.querySelector('.hbn-prev').onclick=function(){go(i-1);play();};
+  root.querySelector('.hbn-next').onclick=function(){go(i+1);play();};
+  root.addEventListener('mouseenter',stop);root.addEventListener('mouseleave',play);
+  root.addEventListener('focusin',stop);root.addEventListener('focusout',play);
+  var x0=null;
+  track.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  track.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){go(i+(dx<0?1:-1));play();}x0=null;});
+  go(0);play();
+})();
+</script>
+{% endif %}

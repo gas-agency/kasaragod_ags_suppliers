@@ -1,0 +1,38 @@
+
+{% extends "base.html" %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<section class="dash"><div class="wrap">
+
+<div class="dhero"><div><h2>{{ title }}</h2><p>{{ total }} record{{ total|pluralize }}{% if qs %} (filtered){% endif %}</p></div>
+<div class="qa"><a class="btn" href="{% url 'export' kind %}?{{ qs }}">Download Excel</a><a class="btn ghost" href="{% url 'admin_dashboard' %}">Back to dashboard</a></div></div>
+
+<div class="tabs">{% for k,t in tabs %}<a href="{% url 'report' k %}" class="{% if k == kind %}on{% endif %}">{{ t }}</a>{% endfor %}</div>
+
+<div class="panel">
+<form method="get" class="fl">
+<label>Search<br><input name="q" value="{{ q }}" placeholder="Name, phone, number"></label>
+<label>From<br><input type="date" name="from" value="{{ d1|date:'Y-m-d' }}"></label>
+<label>To<br><input type="date" name="to" value="{{ d2|date:'Y-m-d' }}"></label>
+{% if labels %}<label>Status<br><select name="status"><option value="">All</option>{% for l in labels %}<option value="{{ l }}"{% if l == st %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>{% endif %}
+<button class="btn">Filter</button><a class="btn alt" href="{% url 'report' kind %}">Clear</a>
+</form>
+
+<p class="hint">Update status:
+{% if kind == "bookings" or kind == "deliveries" %}<a href="{% url 'staff_home' %}">gas bookings</a> {% endif %}
+{% if kind == "orders" or kind == "deliveries" %}<a href="{% url 'manage_orders' %}">accessory orders</a> {% endif %}
+{% if kind == "connections" %}<a href="{% url 'nc_manage' %}">connection requests</a>{% endif %}</p>
+
+<div class="scroll"><table class="tbl"><tr>{% for h in headers %}<th>{{ h }}</th>{% endfor %}</tr>
+{% for r in rows %}<tr>{% for c in r %}<td>{% if forloop.counter0 == si %}<span class="tag">{{ c }}</span>{% else %}{{ c }}{% endif %}</td>{% endfor %}</tr>
+{% empty %}<tr><td colspan="{{ headers|length }}">No records found.</td></tr>{% endfor %}</table></div>
+
+{% if page.paginator.num_pages > 1 %}<div class="pager">
+{% if page.has_previous %}<a class="btn alt" href="?{{ qs }}&page={{ page.previous_page_number }}">Previous</a>{% endif %}
+<span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+{% if page.has_next %}<a class="btn alt" href="?{{ qs }}&page={{ page.next_page_number }}">Next</a>{% endif %}
+</div>{% endif %}
+</div>
+
+</div></section>
+{% endblock %}

@@ -1,0 +1,6 @@
+[
+ {"model":"carousel.slide","pk":1,"fields":{"title":"New: Navya 10 kg composite cylinder","text":"Lighter than steel, never rusts, and you can see the gas level.","button_text":"Book Navya 10 kg","button_link":"#book","color":"blue","order":1,"active":true}},
+ {"model":"carousel.slide","pk":2,"fields":{"title":"Home delivery across Kasaragod","text":"Book online, get a confirmation call, and receive a sealed cylinder at your kitchen.","button_text":"Book a cylinder","button_link":"#book","color":"navy","order":2,"active":true}},
+ {"model":"carousel.slide","pk":3,"fields":{"title":"Bulk supply for hotels and canteens","text":"19 kg and 47.5 kg commercial cylinders with regular scheduled delivery.","button_text":"Ask for a quote","button_link":"#contact","color":"red","order":3,"active":true}},
+ {"model":"carousel.slide","pk":4,"fields":{"title":"Authorised dealer 41002905","text":"Genuine cylinders, trained delivery staff and safety checks at every refill.","button_text":"Read safety tips","button_link":"#safety","color":"dark","order":4,"active":true}}
+]

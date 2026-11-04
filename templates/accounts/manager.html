@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>Manager dashboard</h2><p class="sub">Overview of {{ total }} bookings and {{ customers }} customers.</p>
+{% include "accounts/_msgs.html" %}
+<div class="grid">{% for label,n in stats %}<div class="card"><span class="tag">{{ label }}</span><div class="price">{{ n }}</div></div>{% endfor %}</div><br>
+<p><a class="btn" href="{% url 'staff_home' %}">Manage bookings</a> <a class="btn" href="{% url 'staff_new' %}">Add staff</a> <a class="btn" href="/admin/">Admin panel</a></p><br>
+<h3>Staff accounts</h3><div class="scroll"><table class="tbl"><tr><th>Username</th><th>Name</th><th>Phone</th><th>Active</th><th></th></tr>
+{% for p in staff %}<tr><td>{{ p.user.username }}</td><td>{{ p.user.first_name }}</td><td>{{ p.phone }}</td><td>{{ p.user.is_active|yesno:"Yes,No" }}</td>
+<td><form method="post" action="{% url 'staff_toggle' p.pk %}" class="inl">{% csrf_token %}<button class="btn">{% if p.user.is_active %}Disable{% else %}Enable{% endif %}</button></form></td></tr>
+{% empty %}<tr><td colspan="5">No staff yet.</td></tr>{% endfor %}</table></div></div></section>
+{% endblock %}

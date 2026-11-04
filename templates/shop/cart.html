@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>Your cart</h2>{% include "shop/_msgs.html" %}
+<form method="post" action="{% url 'cart_update' %}">{% csrf_token %}
+<div class="scroll"><table class="tbl"><tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+{% for l in lines %}<tr><td>{{ l.product.name }}</td><td>&#8377;{{ l.product.price|floatformat:2 }}</td>
+<td><input class="qty" type="number" name="qty_{{ l.product.pk }}" value="{{ l.qty }}" min="0" max="{{ l.product.stock }}"></td>
+<td>&#8377;{{ l.subtotal|floatformat:2 }}</td>
+<td><button class="btn" name="remove" value="{{ l.product.pk }}" formaction="{% url 'cart_remove' %}">Remove</button></td></tr>
+{% empty %}<tr><td colspan="5">Your cart is empty. <a href="{% url 'shop_home' %}">Browse accessories</a></td></tr>{% endfor %}</table></div>
+{% if lines %}<p class="tot">Total: &#8377;{{ total|floatformat:2 }}</p><button class="btn">Update cart</button> <a class="btn" href="{% url 'checkout' %}">Checkout</a>{% endif %}
+</form></div></section>
+{% endblock %}

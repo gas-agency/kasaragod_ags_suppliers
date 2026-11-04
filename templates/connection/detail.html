@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>Application {{ a.application_no }}</h2>
+<p class="sub">Submitted {{ a.created|date:"d M Y, h:i A" }}</p>{% include "connection/_msgs.html" %}
+<p><span class="tag">{{ a.get_status_display }}</span></p>
+{% if a.remarks %}<p class="msg" style="margin-top:12px">Note from us: {{ a.remarks }}</p>{% endif %}
+{% if a.status == "rejected" %}<p><a class="btn" href="{% url 'nc_apply' %}">Apply again</a></p>{% endif %}
+<br><div class="two"><div class="card"><h3>Applicant</h3>
+<p><b>{{ a.name }}</b><br>Father / spouse: {{ a.father_name }}<br>Phone: {{ a.phone }}{% if a.email %}<br>Email: {{ a.email }}{% endif %}<br>{{ a.address }} - {{ a.pincode }}</p>
+<p>{{ a.get_connection_type_display }}: {{ a.cylinder }}<br>Aadhaar: XXXX XXXX {{ a.aadhaar_last4 }}</p></div>
+<div class="card"><h3>Documents</h3>
+<img class="docimg" src="{% url 'nc_doc' a.application_no 'photo' %}" alt="Applicant photo"><br><br>
+<a href="{% url 'nc_doc' a.application_no 'front' %}" target="_blank">Aadhaar (front)</a>
+{% if a.aadhaar_back %} | <a href="{% url 'nc_doc' a.application_no 'back' %}" target="_blank">Aadhaar (back)</a>{% endif %}</div></div>
+</div></section>
+{% endblock %}

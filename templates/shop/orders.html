@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap"><h2>My orders</h2><p class="sub">Click an order number to track it.</p>{% include "shop/_msgs.html" %}
+<div class="scroll"><table class="tbl"><tr><th>Order</th><th>Date</th><th>Total</th><th>Payment</th><th>Status</th></tr>
+{% for o in orders %}<tr><td><a href="{% url 'order_detail' o.order_no %}">{{ o.order_no }}</a></td><td>{{ o.created|date:"d M Y" }}</td><td>&#8377;{{ o.total|floatformat:2 }}</td><td>{{ o.get_payment_status_display }}</td><td><span class="tag">{{ o.get_status_display }}</span></td></tr>
+{% empty %}<tr><td colspan="5">No orders yet. <a href="{% url 'shop_home' %}">Shop accessories</a></td></tr>{% endfor %}</table></div></div></section>
+{% endblock %}

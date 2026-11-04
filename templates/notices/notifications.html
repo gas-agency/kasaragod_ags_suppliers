@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block content %}
+<section><div class="wrap narrow"><h2>Notifications</h2><p class="sub">Updates about your bookings and applications.</p>
+{% for n in items %}<div class="ncard{% if not n.read %} new{% endif %}">
+<div><b>{{ n.title }}</b>{% if not n.read %} <span class="tag">New</span>{% endif %}<p>{{ n.message }}</p><small>{{ n.created|date:"d M Y, h:i A" }}</small></div>
+{% if n.link %}<a class="btn alt" href="{{ n.link }}">View</a>{% endif %}</div>
+{% empty %}<p>No notifications yet. They appear here when you book a cylinder or apply for a connection.</p>{% endfor %}
+</div></section>
+{% endblock %}
